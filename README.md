@@ -252,6 +252,8 @@ The **[INCLUDE dataset](https://zenodo.org/record/4010759)** (4,292 clips, 263 w
 ---
 
 ## 📄 License
+## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 #
