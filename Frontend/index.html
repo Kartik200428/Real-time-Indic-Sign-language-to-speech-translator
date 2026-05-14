@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real Time Indic Sign Language to Speech Translator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,300;1,9..144,600;1,9..144,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <canvas id="dotsCanvas"></canvas>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <div class="logo-star">✦</div>
+        <span class="logo-text">Indic SL Translator</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#glossary">Signs</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#pipeline">Pipeline</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#demo">Demo</a>
+      <a href="#features">Features</a>
+      <a href="#glossary">Signs</a>
+      <a href="#about">About</a>
+      <a href="#pipeline">Pipeline</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1 class="hero-title anim-2">
+        Real Time Indic<br />Sign Language<br />
+        <em>to Speech Translator</em>
+      </h1>
+      <p class="hero-sub anim-3">
+        50 signs. 7 Indian languages. One camera.<br />
+        Powered by MediaPipe &amp; BiLSTM deep learning.
+      </p>
+      <div class="hero-btns anim-4">
+        <a href="#demo" class="btn-primary">Open the Canvas</a>
+        <a href="#about" class="btn-outline">Learn More</a>
+      </div>
+    </div>
+
+    <!-- India Skyline silhouette -->
+    <div class="hero-skyline" aria-hidden="true">
+      <svg viewBox="0 0 1440 180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+        <g opacity="1">
+
+          <!-- LEFT CITY BUILDINGS -->
+          <rect x="0"   y="135" width="32" height="45" fill="#FF9933" opacity=".18"/>
+          <rect x="36"  y="115" width="24" height="65" fill="#138808" opacity=".16"/>
+          <rect x="64"  y="125" width="18" height="55" fill="#FF9933" opacity=".14"/>
+          <rect x="86"  y="105" width="14" height="75" fill="#000080" opacity=".13"/>
+          <rect x="104" y="118" width="26" height="62" fill="#138808" opacity=".15"/>
+
+          <!-- QUTUB MINAR (~x=158) tall tapering spire -->
+          <polygon points="152,180 164,180 162,52 154,52" fill="#FF9933" opacity=".28"/>
+          <rect x="150" y="52" width="16" height="4" fill="#FF9933" opacity=".28"/>
+          <rect x="151" y="70" width="14" height="3" fill="#FF9933" opacity=".28"/>
+          <rect x="152" y="88" width="12" height="3" fill="#FF9933" opacity=".28"/>
+          <rect x="153" y="106" width="10" height="3" fill="#FF9933" opacity=".28"/>
+          <ellipse cx="158" cy="50" rx="5" ry="8" fill="#FF9933" opacity=".28"/>
+
+          <!-- Buildings -->
+          <rect x="182" y="128" width="30" height="52" fill="#138808" opacity=".14"/>
+          <rect x="216" y="118" width="22" height="62" fill="#FF9933" opacity=".14"/>
+
+          <!-- PARLIAMENT OF INDIA (~x=295) -->
+          <rect x="262" y="132" width="88" height="48" fill="#000080" opacity=".18"/>
+          <path d="M267,132 A38,42 0 0 1 345,132 Z" fill="#000080" opacity=".22"/>
+          <rect x="304" y="82"  width="3"  height="50" fill="#000080" opacity=".25"/>
+          <rect x="300" y="80"  width="11" height="4"  fill="#FF9933" opacity=".30"/>
+
+          <!-- Buildings -->
+          <rect x="358" y="122" width="22" height="58" fill="#138808" opacity=".14"/>
+          <rect x="384" y="112" width="18" height="68" fill="#FF9933" opacity=".14"/>
+
+          <!-- INDIA GATE (~x=450) -->
+          <rect x="412" y="88"  width="92" height="13" fill="#FF9933" opacity=".28"/>
+          <rect x="412" y="101" width="24" height="79" fill="#FF9933" opacity=".28"/>
+          <rect x="480" y="101" width="24" height="79" fill="#FF9933" opacity=".28"/>
+          <!-- arch curve inside gate (drawn as subtle arc on top of gap) -->
+          <path d="M 436,101 A 22,28 0 0 1 480,101" fill="#FF9933" opacity=".28"/>
+
+          <!-- Buildings leading to Taj -->
+          <rect x="515" y="128" width="28" height="52" fill="#138808" opacity=".13"/>
+          <rect x="547" y="118" width="20" height="62" fill="#FF9933" opacity=".13"/>
+          <rect x="572" y="132" width="36" height="48" fill="#000080" opacity=".12"/>
+          <rect x="614" y="122" width="16" height="58" fill="#138808" opacity=".13"/>
+
+          <!-- TAJ MAHAL (~x=720) — centerpiece -->
+          <!-- far minarets -->
+          <rect x="626" y="68"  width="10" height="92" fill="#FF9933" opacity=".32"/>
+          <ellipse cx="631" cy="66" rx="6" ry="9"     fill="#FF9933" opacity=".32"/>
+          <rect x="804" y="68"  width="10" height="92" fill="#FF9933" opacity=".32"/>
+          <ellipse cx="809" cy="66" rx="6" ry="9"     fill="#FF9933" opacity=".32"/>
+          <!-- near minarets -->
+          <rect x="660" y="84"  width="8"  height="76" fill="#FF9933" opacity=".28"/>
+          <ellipse cx="664" cy="83" rx="5" ry="7"     fill="#FF9933" opacity=".28"/>
+          <rect x="772" y="84"  width="8"  height="76" fill="#FF9933" opacity=".28"/>
+          <ellipse cx="776" cy="83" rx="5" ry="7"     fill="#FF9933" opacity=".28"/>
+          <!-- main platform -->
+          <rect x="645" y="132" width="150" height="48" fill="#FF9933" opacity=".28"/>
+          <!-- main dome (signature onion dome) -->
+          <path d="M674,132 C674,32 766,32 766,132 Z"  fill="#FF9933" opacity=".35"/>
+          <!-- finial -->
+          <line x1="720" y1="32" x2="720" y2="12" stroke="#FF9933" stroke-width="2.5" opacity=".4"/>
+          <circle cx="720" cy="10" r="4.5" fill="#FF9933" opacity=".4"/>
+
+          <!-- RIGHT CITY BUILDINGS -->
+          <rect x="840" y="122" width="24" height="58" fill="#138808" opacity=".14"/>
+          <rect x="868" y="112" width="28" height="68" fill="#FF9933" opacity=".14"/>
+          <rect x="900" y="128" width="18" height="52" fill="#000080" opacity=".13"/>
+
+          <!-- LOTUS TEMPLE suggestion (~x=960) -->
+          <path d="M928,165 Q940,118 960,105 Q980,118 992,165 Z" fill="#138808" opacity=".22"/>
+          <path d="M938,165 Q948,122 960,112 Q972,122 982,165 Z" fill="#138808" opacity=".18"/>
+          <path d="M920,165 Q942,128 960,118 Q978,128 1000,165 Z" fill="#138808" opacity=".14"/>
+
+          <!-- MORE RIGHT BUILDINGS -->
+          <rect x="1010" y="118" width="26" height="62" fill="#FF9933" opacity=".14"/>
+          <rect x="1040" y="102" width="20" height="78" fill="#000080" opacity=".13"/>
+          <rect x="1064" y="122" width="32" height="58" fill="#138808" opacity=".14"/>
+          <rect x="1100" y="112" width="22" height="68" fill="#FF9933" opacity=".14"/>
+          <rect x="1126" y="128" width="38" height="52" fill="#000080" opacity=".12"/>
+          <rect x="1168" y="108" width="18" height="72" fill="#138808" opacity=".14"/>
+          <rect x="1190" y="118" width="28" height="62" fill="#FF9933" opacity=".14"/>
+          <rect x="1222" y="132" width="22" height="48" fill="#138808" opacity=".13"/>
+          <rect x="1248" y="112" width="32" height="68" fill="#000080" opacity=".13"/>
+          <rect x="1284" y="122" width="18" height="58" fill="#FF9933" opacity=".14"/>
+          <rect x="1306" y="102" width="26" height="78" fill="#138808" opacity=".14"/>
+          <rect x="1336" y="118" width="50" height="62" fill="#FF9933" opacity=".13"/>
+          <rect x="1390" y="108" width="50" height="72" fill="#000080" opacity=".12"/>
+
+          <!-- Ground line (tricolor) -->
+          <rect x="0"   y="178" width="480" height="2" fill="#FF9933" opacity=".45"/>
+          <rect x="480" y="178" width="480" height="2" fill="#138808" opacity=".45"/>
+          <rect x="960" y="178" width="480" height="2" fill="#000080" opacity=".35"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="hero-orb-wrap">
+      <div class="hero-orb">
+        <div class="orb-ring r1"></div>
+        <div class="orb-ring r2"></div>
+        <div class="orb-ring r3"></div>
+        <div class="orb-core">
+          <svg width="56" height="56" viewBox="0 0 60 64" fill="none">
+            <rect x="22" y="6"  width="11" height="42" rx="5.5" fill="#F5C842" opacity=".95"/>
+            <rect x="37" y="2"  width="10" height="44" rx="5"   fill="#F5C842" opacity=".75"/>
+            <rect x="51" y="10" width="9"  height="36" rx="4.5" fill="#F5C842" opacity=".55"/>
+            <rect x="9"  y="16" width="13" height="32" rx="6.5" fill="#F5C842" opacity=".85"/>
+            <ellipse cx="30" cy="58" rx="28" ry="5" fill="#2E6B9A" opacity=".3"/>
+          </svg>
+          <span class="orb-label">Sign</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DEMO ── -->
+  <section class="demo-section" id="demo">
+    <div class="section-label">✦ Live Demo</div>
+    <h2 class="section-heading">The <em>canvas</em> is live.</h2>
+
+    <div class="demo-wrap">
+
+      <!-- Feed -->
+      <div class="feed-col">
+        <div class="feed-frame" id="feedFrame">
+          <img id="videoStream" src="http://localhost:5000/video_feed" alt="Camera stream" />
+          <div class="feed-overlay-top" id="feedOverlayTop" style="display:none;">
+            <span class="live-dot"></span>
+            <span class="live-text">LIVE</span>
+          </div>
+        </div>
+
+        <div class="bars-wrap">
+          <div class="bar-row">
+            <span class="bar-lbl">Buffer</span>
+            <div class="bar-track"><div class="bar-fill bf-gold" id="bufferBar"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-lbl">Vote</span>
+            <div class="bar-track"><div class="bar-fill bf-teal" id="voteBar"></div></div>
+          </div>
+        </div>
+
+        <button class="btn-cam" id="btnCam" onclick="toggleCamera()">
+          <svg id="camIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <span id="camLabel">Start Camera</span>
+        </button>
+      </div>
+
+      <!-- Output panel -->
+      <div class="output-col">
+
+        <div class="out-card sign-card">
+          <div class="out-card-title">Detected Sign</div>
+          <div class="sign-big" id="detectedWord">—</div>
+          <div class="sign-meta" id="signMeta"></div>
+        </div>
+
+        <div class="out-card">
+          <div class="out-card-title">Building Sentence</div>
+          <div class="building-text" id="buildingText">—</div>
+        </div>
+
+        <div class="out-card final-out-card" id="finalCard">
+          <div class="out-card-title out-card-title-green">✦ Final Output</div>
+          <div class="final-text" id="finalText"></div>
+        </div>
+
+        <div class="lang-row">
+          <label class="lang-lbl">Language</label>
+          <select id="langSelect" class="lang-sel" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="bn">বাংলা (Bengali)</option>
+            <option value="ta">தமிழ் (Tamil)</option>
+            <option value="te">తెలుగు (Telugu)</option>
+            <option value="mr">मराठी (Marathi)</option>
+            <option value="gu">ગુજરાતી (Gujarati)</option>
+          </select>
+        </div>
+
+        <div class="action-grid">
+          <button class="act-btn act-confirm" onclick="finalizeSentence()">✓ Confirm</button>
+          <button class="act-btn act-speak"   onclick="speakOutput()">♪ Speak</button>
+          <button class="act-btn act-undo"    onclick="undoWord()">↩ Undo</button>
+          <button class="act-btn act-clear"   onclick="clearSentence()">✕ Clear</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES ── -->
+  <section class="features-section" id="features">
+    <div class="features-inner">
+      <div class="section-label">✦ Features</div>
+      <h2 class="section-heading">What makes it <em>work.</em></h2>
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-title">Real-Time Recognition</h3>
+          <p class="feature-desc">
+            Processes live webcam frames server-side using MediaPipe Holistic — extracting
+            hand, pose, and facial landmarks simultaneously at up to 30 fps for instant sign detection.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🗣</div>
+          <h3 class="feature-title">7 Indian Languages</h3>
+          <p class="feature-desc">
+            Recognised sentences are spoken aloud using gTTS, supporting English, Hindi, Bengali,
+            Tamil, Telugu, Marathi, and Gujarati — making ISL accessible across all major Indian languages.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">✦</div>
+          <h3 class="feature-title">AI Grammar Correction</h3>
+          <p class="feature-desc">
+            Groq LLaMA 3.1 reconstructs grammatically correct English from raw ISL gloss words —
+            automatically adding linking verbs, articles, and prepositions before speaking.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3 class="feature-title">Vote-Based Stability</h3>
+          <p class="feature-desc">
+            A majority-vote window across 6 consecutive predictions confirms a word before
+            adding it to the sentence — eliminating flickering and false positives.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h3 class="feature-title">BiLSTM Model</h3>
+          <p class="feature-desc">
+            A Bidirectional LSTM processes 30-frame landmark sequences, capturing both
+            forward and backward temporal patterns for robust gesture classification.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3 class="feature-title">Browser-Based UI</h3>
+          <p class="feature-desc">
+            Runs entirely in your browser — no plugins, no installation. The Flask server
+            streams annotated video via MJPEG and serves the full web interface locally.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SIGN GLOSSARY ── -->
+  <section class="glossary-section" id="glossary">
+    <div class="glossary-inner">
+      <div class="section-label">✦ Sign Glossary</div>
+      <h2 class="section-heading">Supported <em>signs.</em></h2>
+      <p class="glossary-sub">A selection of the 50 ISL word classes the model can recognise.</p>
+      <div class="sign-chips">
+        <div class="sign-chip"><div class="chip-emoji">🙋</div><div class="chip-name">I</div><div class="chip-hindi">मैं</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👆</div><div class="chip-name">You</div><div class="chip-hindi">तुम</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👨</div><div class="chip-name">He</div><div class="chip-hindi">वह</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👩</div><div class="chip-name">She</div><div class="chip-hindi">वह</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👥</div><div class="chip-name">They</div><div class="chip-hindi">वे</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🤝</div><div class="chip-name">We</div><div class="chip-hindi">हम</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👉</div><div class="chip-name">It</div><div class="chip-hindi">यह</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👩‍👦</div><div class="chip-name">Mother</div><div class="chip-hindi">माँ</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👨‍👦</div><div class="chip-name">Father</div><div class="chip-hindi">पिता</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👦</div><div class="chip-name">Brother</div><div class="chip-hindi">भाई</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👧</div><div class="chip-name">Sister</div><div class="chip-hindi">बहन</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👨‍👩‍👧‍👦</div><div class="chip-name">Family</div><div class="chip-hindi">परिवार</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🤗</div><div class="chip-name">Friend</div><div class="chip-hindi">दोस्त</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👨‍⚕️</div><div class="chip-name">Doctor</div><div class="chip-hindi">डॉक्टर</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👨‍🏫</div><div class="chip-name">Teacher</div><div class="chip-hindi">शिक्षक</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👮</div><div class="chip-name">Police</div><div class="chip-hindi">पुलिस</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🎓</div><div class="chip-name">Student</div><div class="chip-hindi">छात्र</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🤒</div><div class="chip-name">Patient</div><div class="chip-hindi">मरीज़</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🚹</div><div class="chip-name">Man</div><div class="chip-hindi">आदमी</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🚺</div><div class="chip-name">Woman</div><div class="chip-hindi">औरत</div></div>
+        <div class="sign-chip"><div class="chip-emoji">😊</div><div class="chip-name">Happy</div><div class="chip-hindi">खुश</div></div>
+        <div class="sign-chip"><div class="chip-emoji">😔</div><div class="chip-name">Sad</div><div class="chip-hindi">दुखी</div></div>
+        <div class="sign-chip"><div class="chip-emoji">✅</div><div class="chip-name">Good</div><div class="chip-hindi">अच्छा</div></div>
+        <div class="sign-chip"><div class="chip-emoji">❌</div><div class="chip-name">Bad</div><div class="chip-hindi">बुरा</div></div>
+        <div class="sign-chip"><div class="chip-emoji">💚</div><div class="chip-name">Alive</div><div class="chip-hindi">जीवित</div></div>
+        <div class="sign-chip"><div class="chip-emoji">💪</div><div class="chip-name">Strong</div><div class="chip-hindi">मजबूत</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🥱</div><div class="chip-name">Weak</div><div class="chip-hindi">कमज़ोर</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🌿</div><div class="chip-name">Healthy</div><div class="chip-hindi">स्वस्थ</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🤧</div><div class="chip-name">Sick</div><div class="chip-hindi">बीमार</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👴</div><div class="chip-name">Old</div><div class="chip-hindi">बूढ़ा</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🧒</div><div class="chip-name">Young</div><div class="chip-hindi">जवान</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👂</div><div class="chip-name">Deaf</div><div class="chip-hindi">बहरा</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🌅</div><div class="chip-name">Good Morning</div><div class="chip-hindi">सुप्रभात</div></div>
+        <div class="sign-chip"><div class="chip-emoji">👋</div><div class="chip-name">Hello</div><div class="chip-hindi">नमस्ते</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🙏</div><div class="chip-name">Thank You</div><div class="chip-hindi">धन्यवाद</div></div>
+        <div class="sign-chip"><div class="chip-emoji">❓</div><div class="chip-name">How are you</div><div class="chip-hindi">कैसे हो</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🏠</div><div class="chip-name">House</div><div class="chip-hindi">घर</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🏥</div><div class="chip-name">Hospital</div><div class="chip-hindi">अस्पताल</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🏫</div><div class="chip-name">School</div><div class="chip-hindi">स्कूल</div></div>
+        <div class="sign-chip"><div class="chip-emoji">💭</div><div class="chip-name">Dream</div><div class="chip-hindi">सपना</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🏃</div><div class="chip-name">Exercise</div><div class="chip-hindi">व्यायाम</div></div>
+        <div class="sign-chip"><div class="chip-emoji">💊</div><div class="chip-name">Medicine</div><div class="chip-hindi">दवाई</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🤟</div><div class="chip-name">Sign</div><div class="chip-hindi">संकेत</div></div>
+        <div class="sign-chip"><div class="chip-emoji">⚽</div><div class="chip-name">Sport</div><div class="chip-hindi">खेल</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🌄</div><div class="chip-name">Morning</div><div class="chip-hindi">सुबह</div></div>
+        <div class="sign-chip"><div class="chip-emoji">🌙</div><div class="chip-name">Night</div><div class="chip-hindi">रात</div></div>
+        <div class="sign-chip"><div class="chip-emoji">📅</div><div class="chip-name">Today</div><div class="chip-hindi">आज</div></div>
+        <div class="sign-chip"><div class="chip-emoji">📆</div><div class="chip-name">Tomorrow</div><div class="chip-hindi">कल</div></div>
+        <div class="sign-chip"><div class="chip-emoji">⏮️</div><div class="chip-name">Yesterday</div><div class="chip-hindi">कल (बीता)</div></div>
+        <div class="sign-chip"><div class="chip-emoji">⏰</div><div class="chip-name">Time</div><div class="chip-hindi">समय</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section class="about-section" id="about">
+    <div class="about-wrap">
+      <div class="about-text">
+        <div class="section-label">✦ About</div>
+        <h2 class="section-heading">Bridging the <em>silence.</em></h2>
+        <p class="about-para">
+          This system captures webcam video server-side, extracts MediaPipe Holistic
+          landmarks across hand joints, body pose, and facial features — feeding
+          30-frame sequences into a Bidirectional LSTM to recognise 50 ISL word classes in real time.
+        </p>
+        <p class="about-para">
+          A vote-based confirmation window stabilises predictions. Sentences are
+          refined by Groq LLM grammar correction and spoken aloud in 7 Indian languages via gTTS.
+        </p>
+      </div>
+
+      <div class="stats-wrap">
+        <div class="stat-card"><div class="stat-n">50</div><div class="stat-d">ISL Classes</div></div>
+        <div class="stat-card"><div class="stat-n">7</div><div class="stat-d">Languages</div></div>
+        <div class="stat-card"><div class="stat-n">30</div><div class="stat-d">Frames/Seq</div></div>
+        <div class="stat-card"><div class="stat-n">1692</div><div class="stat-d">Features</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PIPELINE ── -->
+  <section class="pipeline-section" id="pipeline">
+    <div class="section-label">✦ Pipeline</div>
+    <h2 class="section-heading">How it <em>flows.</em></h2>
+    <div class="pipe-grid">
+      <div class="pipe-card">
+        <div class="pipe-num">01</div>
+        <h3>Capture</h3>
+        <p>OpenCV reads webcam frames server-side and flips them for natural mirroring.</p>
+      </div>
+      <div class="pipe-card">
+        <div class="pipe-num">02</div>
+        <h3>Landmarks</h3>
+        <p>MediaPipe Holistic extracts 1,692-dimensional feature vectors per frame.</p>
+      </div>
+      <div class="pipe-card">
+        <div class="pipe-num">03</div>
+        <h3>BiLSTM</h3>
+        <p>A 30-frame sequence is classified with vote-based confirmation for stability.</p>
+      </div>
+      <div class="pipe-card">
+        <div class="pipe-num">04</div>
+        <h3>Speak</h3>
+        <p>Groq LLM refines the sentence. gTTS speaks it in your chosen language.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="logo-star">✦</span>
+        <span class="logo-text">ISL Translator</span>
+      </div>
+      <p class="footer-tagline">"Bridging silence, one sign at a time."</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

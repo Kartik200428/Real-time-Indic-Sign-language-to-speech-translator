@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+venv312/
+env/
+.venv/
+
+# Dataset — 55 GB, not on GitHub
+data/raw/
+
+# Personal landmark recordings (.npy files)
+data/personal_features/
+data/extracted_features/**/*.npy
+!data/extracted_features/**/.gitkeep
+
+# Keep only the active model (isl_model_solo.keras is included)
+models/isl_model.keras
+models/isl_model_finetuned.keras
+
+# Misc outputs
+reports/generate_report.py
+reports/*.txt
+evaluation_charts/
+
+# Env / secrets
+.env
+.env.*
+
+# Claude Code internals
+.claude/
+CLAUDE.md
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
